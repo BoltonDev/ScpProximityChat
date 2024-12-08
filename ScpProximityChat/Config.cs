@@ -29,6 +29,9 @@ namespace ScpProximityChat
             RoleTypeId.Scp939,
         };
 
+        [Description("If false, SCPs won't hear those with proximity chat enabled until they are near of them.")]
+        public bool UseDefaultScpChat { get; set; } = true;
+
         [Description("The volume of the voice.")]
         public float Volume { get; set; } = 10f;
 

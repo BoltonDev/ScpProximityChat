@@ -90,9 +90,16 @@ namespace ScpProximityChat
                 AudioMessage audioMessage = new AudioMessage(speaker.ControllerId, encodedData, dataLen);
                 foreach (Player target in Player.List)
                 {
-                    if (target.Role is IVoiceRole voiceRole && voiceRole.VoiceModule.ValidateReceive(player.ReferenceHub, VoiceChatChannel.Proximity) != VoiceChatChannel.None && !target.IsScp)
-                        target.ReferenceHub.connectionToClient.Send(audioMessage);
+                    if (target.Role is not IVoiceRole voiceRole || voiceRole.VoiceModule.ValidateReceive(player.ReferenceHub, VoiceChatChannel.Proximity) == VoiceChatChannel.None)
+                        continue;
+
+                    if(_config.UseDefaultScpChat && target.IsScp)
+                        continue;
+
+                    target.ReferenceHub.connectionToClient.Send(audioMessage);
                 }
+
+                ev.IsAllowed = _config.UseDefaultScpChat;
             }
         }
 
